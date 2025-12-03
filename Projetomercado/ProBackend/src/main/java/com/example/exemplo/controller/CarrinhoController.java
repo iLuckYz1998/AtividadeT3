@@ -16,7 +16,7 @@ public class CarrinhoController {
     private CarrinhoService carrinhoService;
 
 
-    // ----- LISTAR CARRINHO -----
+    
     @GetMapping("/{cpf}")
     public ResponseEntity<Carrinho> listarCarrinho(@PathVariable String cpf) {
         Carrinho carrinho = carrinhoService.listarCarrinho(cpf);
@@ -24,7 +24,7 @@ public class CarrinhoController {
     }
 
 
-    // ----- ADICIONAR ITEM -----
+    
     @PostMapping("/{cpf}/adicionar")
     public ResponseEntity<Carrinho> adicionarItem(
             @PathVariable String cpf,
@@ -40,7 +40,7 @@ public class CarrinhoController {
     }
 
 
-    // ----- REMOVER ITEM -----
+    
     @DeleteMapping("/{cpf}/remover/{produtoId}")
     public ResponseEntity<Carrinho> removerItem(
             @PathVariable String cpf,

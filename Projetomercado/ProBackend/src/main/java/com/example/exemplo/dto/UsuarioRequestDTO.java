@@ -13,9 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class UsuarioRequestDTO {
 
-    //Valida a entrada de dados do usuario conforme os criterios.
-    //A api aceitará os daods somente se atender os criterios.
-    // Casa contrario retorna em jsonn uma das mensagens abaixo.
+    
 
     
     

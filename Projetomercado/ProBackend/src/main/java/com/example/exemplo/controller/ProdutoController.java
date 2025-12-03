@@ -28,7 +28,7 @@ public class ProdutoController {
     @Autowired
     private ProdutoService produtoService;
 
-        // CREATE
+        
     @PostMapping
     public ResponseEntity<Map<String, Object>> salvar(@Valid @RequestBody ProdutoRequestDTO dto){
         produtoService.salvarProduto(dto);
@@ -39,7 +39,7 @@ public class ProdutoController {
         
     }
 
-    // READ
+    
 
     @GetMapping
     public ResponseEntity<List<ProdutoResponseDTO>> listar(){
@@ -48,7 +48,7 @@ public class ProdutoController {
         .body(produtoService.ListarProduto());
     }
 
-    // UPDATE
+    
     @PutMapping("/{id}")
     public ResponseEntity<Map<String, Object>> atualizar(
         @PathVariable Long id,
@@ -61,7 +61,7 @@ public class ProdutoController {
         }
 
 
-    // Delete
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, Object>> deletarUsuario (@PathVariable Long id){
         produtoService.deletarProduto(id);

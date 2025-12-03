@@ -16,7 +16,7 @@ public class ProdutoService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
-    // Consulta no banco de dados
+    
     public List<ProdutoResponseDTO> ListarProduto(){
         return produtoRepository
         .findAll()
@@ -34,7 +34,7 @@ public class ProdutoService {
         .toList();
     }
 
-    // Salvar um novo usuario.
+    
     public Produto salvarProduto(ProdutoRequestDTO produtoRequestDTO){
         if(produtoRepository.findByCodigo(produtoRequestDTO.getCodigo()).isPresent()){
             throw new RuntimeException("Produto já cadastrado");
@@ -55,7 +55,7 @@ public class ProdutoService {
       
 
     
-        //Update
+        
         public Produto atualizarProduto(Long id, ProdutoRequestDTO dto){
             if(!produtoRepository.existsById(id)){
                 throw new RuntimeException("Produto não encontrado");
@@ -76,7 +76,7 @@ public class ProdutoService {
 
         }
     
-        // Delete
+        
         public void deletarProduto(Long id){
             if(!produtoRepository.existsById(id)){
                 throw new RuntimeException("Produto não encontrado");

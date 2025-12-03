@@ -25,7 +25,7 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    // CREATE
+    
     @PostMapping
     public ResponseEntity<Map<String, Object>> salvar(@Valid @RequestBody UsuarioRequestDTO dto){
         usuarioService.salvarCliente(dto);
@@ -36,7 +36,7 @@ public class UsuarioController {
         
     }
 
-    // READ
+    
 
     @GetMapping
     public ResponseEntity<List<UsuarioResponseDTO>> listar(){
@@ -45,7 +45,7 @@ public class UsuarioController {
         .body(usuarioService.ListarTodos());
     }
 
-    // UPDATE
+    
     public ResponseEntity<Map<String, Object>> atualizar(
         @PathVariable Long id,
         @Valid @RequestBody  UsuarioResponseDTO dto){
@@ -57,7 +57,7 @@ public class UsuarioController {
         }
 
        
-    // Delete
+    
     public ResponseEntity<Map<String, Object>> deletarUsuario (@PathVariable Long id){
         usuarioService.deletarUsuario(id);
         return ResponseEntity

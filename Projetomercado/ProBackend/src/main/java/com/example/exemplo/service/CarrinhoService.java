@@ -23,21 +23,21 @@ public class CarrinhoService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
-     // LISTAR CARRINHO -------------------------
+    
     public Carrinho listarCarrinho(String cpf) {
         return carrinhoRepository.findByUsuarioId(cpf)
                 .orElseThrow(() -> new RuntimeException("Carrinho não encontrado para este usuário."));
     }
 
 
-    // ----------------------- ADICIONAR ITEM -----------------------
+    
     public Carrinho adicionarItem(String cpf, String produtoId, int quantidade) {
 
-        // 1. Buscar usuário
+        
         Usuario usuario = usuarioRepository.findByCpf(cpf)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
 
-        // 2. Buscar ou criar carrinho
+        
         Carrinho carrinho = carrinhoRepository.findByUsuarioId(cpf)
                 .orElseGet(() -> {
                     Carrinho novo = new Carrinho();
@@ -45,16 +45,16 @@ public class CarrinhoService {
                     return carrinhoRepository.save(novo);
                 });
 
-        // 3. Buscar produto
+        
         Produto produto = produtoRepository.findByCodigo(produtoId)
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado."));
 
-        // 4. Verificar estoque
+        
         if (produto.getQuantidade() < quantidade) {
             throw new RuntimeException("Estoque insuficiente.");
         }
 
-        // 5. Verificar se item já existe no carrinho
+        
         ItemCarrinho itemExistente = carrinho.getItens()
                 .stream()
                 .filter(i -> i.getProduto().getId().equals(Long.valueOf(produtoId)))
@@ -74,21 +74,21 @@ public class CarrinhoService {
             carrinho.getItens().add(novoItem);
         }
 
-        // 6. Atualizar total
+        
         atualizarTotal(carrinho);
 
         return carrinhoRepository.save(carrinho);
     }
 
 
-    // ----------------------- REMOVER ITEM -----------------------
+    
     public Carrinho removerItem(String cpf, String produtoId) {
 
-        // 1. Buscar carrinho
+        
         Carrinho carrinho = carrinhoRepository.findByUsuarioId(cpf)
                 .orElseThrow(() -> new RuntimeException("Carrinho não encontrado."));
 
-        // 2. Remover item
+        
         boolean removido = carrinho.getItens()
                 .removeIf(i -> i.getProduto().getId().equals(Long.valueOf(produtoId)));
 
@@ -96,14 +96,14 @@ public class CarrinhoService {
             throw new RuntimeException("Item não encontrado no carrinho.");
         }
 
-        // 3. Recalcular total
+        
         atualizarTotal(carrinho);
 
         return carrinhoRepository.save(carrinho);
     }
 
 
-    // ----------------------- FUNÇÃO AUXILIAR -----------------------
+    
     private void atualizarTotal(Carrinho carrinho) {
         double total = carrinho.getItens()
                 .stream()

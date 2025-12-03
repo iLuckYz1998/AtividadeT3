@@ -23,7 +23,7 @@ public class UsuarioService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    // Consulta no banco de dados
+    
     public List<UsuarioResponseDTO> ListarTodos(){
         return usuarioRepository
         .findAll()
@@ -32,7 +32,7 @@ public class UsuarioService {
         .toList();
     }
 
-    // Salvar um novo usuario. 
+     
     public Usuario salvarCliente(UsuarioRequestDTO usuarioRequestDTO){
         if(usuarioRepository.findByEmail(usuarioRequestDTO.getEmail()).isPresent()){
             throw new RuntimeException("Cliente já cadastrado");
@@ -41,7 +41,7 @@ public class UsuarioService {
         Usuario novoUsuario = new Usuario();
         novoUsuario.setNome(usuarioRequestDTO.getNome());
         novoUsuario.setEmail(usuarioRequestDTO.getEmail());
-        // Criptografar a senha antes de salvar
+        
         novoUsuario.setSenha(bCryptPasswordEncoder.encode(usuarioRequestDTO.getSenha()));
         
         usuarioRepository.save(novoUsuario);
@@ -51,7 +51,7 @@ public class UsuarioService {
         
 
     
-        //Update
+        
         @PutMapping("/{id}")
         public Usuario atualizarUsuario(Long id, UsuarioRequestDTO dto){
             if(!usuarioRepository.existsById(id)){
@@ -69,7 +69,7 @@ public class UsuarioService {
             
         }
     
-        // Delete
+        
         @DeleteMapping("/{id}")
         public void deletarUsuario(Long id){
             if(!usuarioRepository.existsById(id)){
