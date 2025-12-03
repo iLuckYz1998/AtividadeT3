@@ -1,0 +1,1 @@
+Equipe: Yan Mendes, Lucas Santiago, Gustavo Mirales, Lucas Xavier.
