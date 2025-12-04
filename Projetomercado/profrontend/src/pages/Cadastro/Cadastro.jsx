@@ -1,13 +1,16 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { usuarioService } from '../../services/api';
 import './Cadastro.css';
 
 function Cadastro() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     nome: '',
     cpf: '',
     email: '',
     telefone: '',
+    senha: '',
     cep: '',
     rua: '',
     numero: '',
@@ -36,9 +39,10 @@ function Cadastro() {
       // Estrutura conforme UsuarioRequestDTO do backend
       const usuario = {
         nome: formData.nome,
-        cpf: formData.cpf,
+        cpf: formData.cpf.replace(/\D/g, ''), // Remove formatação
         email: formData.email,
         telefone: formData.telefone,
+        senha: formData.senha || '123456', // Adiciona senha padrão se vazia
         endereco: {
           cep: formData.cep,
           rua: formData.rua,
@@ -54,20 +58,10 @@ function Cadastro() {
       setMensagem(response.Message || 'Usuário cadastrado com sucesso!');
       setErro('');
 
-      // Limpar formulário
-      setFormData({
-        nome: '',
-        cpf: '',
-        email: '',
-        telefone: '',
-        cep: '',
-        rua: '',
-        numero: '',
-        complemento: '',
-        bairro: '',
-        cidade: '',
-        estado: ''
-      });
+      // Redirecionar para login após 2 segundos
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
 
     } catch (error) {
       setErro('Erro ao cadastrar usuário. Verifique os dados e tente novamente.');
@@ -84,6 +78,10 @@ function Cadastro() {
 
       {mensagem && <div className="sucesso">{mensagem}</div>}
       {erro && <div className="erro">{erro}</div>}
+
+      <div className="login-link">
+        <p>Já tem uma conta? <a href="/login">Faça login aqui</a></p>
+      </div>
 
       <form onSubmit={handleSubmit} className="form-cadastro">
         <div className="form-section">
@@ -137,6 +135,19 @@ function Cadastro() {
               name="email"
               value={formData.email}
               onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="senha">Senha *</label>
+            <input
+              type="password"
+              id="senha"
+              name="senha"
+              value={formData.senha}
+              onChange={handleChange}
+              minLength="6"
               required
             />
           </div>

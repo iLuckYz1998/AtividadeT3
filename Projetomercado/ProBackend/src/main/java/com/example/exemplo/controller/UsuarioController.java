@@ -5,13 +5,16 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping; 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping; 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.exemplo.dto.LoginRequestDTO;
 import com.example.exemplo.dto.UsuarioRequestDTO;
 import com.example.exemplo.dto.UsuarioResponseDTO;
 import com.example.exemplo.service.UsuarioService;
@@ -46,10 +49,11 @@ public class UsuarioController {
     }
 
     
+    @PutMapping("/{id}") 
     public ResponseEntity<Map<String, Object>> atualizar(
         @PathVariable Long id,
-        @Valid @RequestBody  UsuarioResponseDTO dto){
-            usuarioService.atualizarUsuario(id, null);
+        @Valid @RequestBody  UsuarioRequestDTO dto){ 
+            usuarioService.atualizarUsuario(id, dto);
 
             return ResponseEntity
             .ok()
@@ -58,11 +62,18 @@ public class UsuarioController {
 
        
     
+    @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, Object>> deletarUsuario (@PathVariable Long id){
         usuarioService.deletarUsuario(id);
+
         return ResponseEntity
         .ok()
-        .body(Map.of("menssage","Excluido com sucesso", "Sucesso", true));
+        .body(Map.of("menssage", "Usuario deletado com sucesso", "Sucesso", "true"));
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<UsuarioResponseDTO> login(@Valid @RequestBody LoginRequestDTO dto){
+        UsuarioResponseDTO usuario = usuarioService.login(dto.getEmail(), dto.getSenha());
+        return ResponseEntity.ok(usuario);
+    }
 }

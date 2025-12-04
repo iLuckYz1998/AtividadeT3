@@ -10,27 +10,47 @@ async function request(url, options = {}) {
   });
 
   if (!response.ok) {
-    throw new Error(`Erro na requisição: ${response.statusText}`);
+    
+    const errorBody = await response.json().catch(() => ({ message: response.statusText }));
+    throw new Error(`Erro na requisição: ${errorBody.message || response.statusText}`);
   }
 
+
+  if (response.status === 204 || response.headers.get('content-length') === '0') {
+    return {};
+  }
+  
   return response.json();
 }
 
 export const produtoService = {
-  listar: () => request('/produto'),
 
-  criar: (produto) => request('/produto', {
+  listar: () => request('/produtos'),
+
+
+  criar: (produto, usuarioId) => request('/produtos', {
     method: 'POST',
     body: JSON.stringify(produto),
+    headers: {
+      'Usuario-Id': usuarioId
+    }
   }),
 
-  atualizar: (id, produto) => request(`/produto/${id}`, {
+
+  atualizar: (id, produto, usuarioId) => request(`/produtos/${id}`, {
     method: 'PUT',
     body: JSON.stringify(produto),
+    headers: {
+      'Usuario-Id': usuarioId
+    }
   }),
 
-  deletar: (id) => request(`/produto/${id}`, {
+
+  deletar: (id, usuarioId) => request(`/produtos/${id}`, {
     method: 'DELETE',
+    headers: {
+      'Usuario-Id': usuarioId
+    }
   }),
 };
 
@@ -40,6 +60,11 @@ export const usuarioService = {
   criar: (usuario) => request('/usuario', {
     method: 'POST',
     body: JSON.stringify(usuario),
+  }),
+
+  login: (credentials) => request('/usuario/login', {
+    method: 'POST',
+    body: JSON.stringify(credentials),
   }),
 };
 
@@ -56,4 +81,15 @@ export const carrinhoService = {
     request(`/carrinho/${cpf}/remover/${produtoId}`, {
       method: 'DELETE',
     }),
+};
+
+export const vendasService = {
+  listar: () => request('/vendas'),
+
+  criar: (venda) => request('/vendas', {
+    method: 'POST',
+    body: JSON.stringify(venda),
+  }),
+
+  buscarPorCpf: (cpf) => request(`/vendas/usuario/${cpf}`),
 };

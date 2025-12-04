@@ -1,7 +1,6 @@
 package com.example.exemplo.dto;
 
-import com.example.exemplo.model.Produto;
-import com.example.exemplo.model.Usuario;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,12 +9,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+public class VendasResponseDTO {
 
-public class VendasResponseDTO{
-
-   private Usuario Cliente;
-   private Produto produto;
-   
-
-    
+    private Long id;
+    private String nomeCliente;
+    private double valorTotal;
+    private String pagamento;
+    private LocalDateTime dataVenda;
 }

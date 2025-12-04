@@ -1,6 +1,7 @@
 package com.example.exemplo.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,13 +11,12 @@ import lombok.NoArgsConstructor;
 @Data
 public class VendasRequestDTO {
 
-    
-    
-    
-    @NotBlank(message = "O Cpf do Cliente é obrigatório")
-    private String cpfCliente;
+    @NotNull(message = "O ID do comprador é obrigatório")
+    private Long compradorId;
 
-  
+    @NotNull(message = "O ID do carrinho é obrigatório")
+    private Long carrinhoId;
 
-
+    @NotBlank(message = "A forma de pagamento é obrigatória")
+    private String pagamento;
 }

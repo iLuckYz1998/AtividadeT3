@@ -4,63 +4,20 @@
 
 .carrinho-page h1 {
   text-align: center;
-  color: #2c3e50;
+  color: #e0e0e0;
   margin-bottom: 2rem;
+  font-size: 2.5rem;
+  font-weight: 700;
 }
 
-.busca-carrinho {
-  max-width: 600px;
-  margin: 0 auto 2rem;
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.busca-carrinho label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #2c3e50;
-  font-weight: 500;
-}
-
-.input-group {
-  display: flex;
-  gap: 1rem;
-}
-
-.input-group input {
-  flex: 1;
-  padding: 0.75rem;
-  border: 1px solid #bdc3c7;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-.input-group input:focus {
-  outline: none;
-  border-color: #3498db;
-}
-
-.btn-buscar {
-  padding: 0.75rem 2rem;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  white-space: nowrap;
-}
-
-.btn-buscar:hover:not(:disabled) {
-  background-color: #2980b9;
-}
-
-.btn-buscar:disabled {
-  background-color: #95a5a6;
-  cursor: not-allowed;
+.loading {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+  color: #3498db;
+  background: rgba(52, 152, 219, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(52, 152, 219, 0.3);
 }
 
 .carrinho-container {
@@ -71,21 +28,23 @@
 
 .itens-carrinho,
 .resumo-carrinho {
-  background: white;
+  background: rgba(30, 30, 46, 0.95);
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .itens-carrinho h2,
 .resumo-carrinho h2 {
-  color: #2c3e50;
+  color: #e0e0e0;
   margin-bottom: 1.5rem;
   font-size: 1.25rem;
+  font-weight: 600;
 }
 
 .item-carrinho {
-  border-bottom: 1px solid #ecf0f1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding: 1.5rem 0;
   display: flex;
   justify-content: space-between;
@@ -98,11 +57,11 @@
 
 .item-info h3 {
   margin: 0 0 0.5rem;
-  color: #2c3e50;
+  color: #e0e0e0;
 }
 
 .item-desc {
-  color: #7f8c8d;
+  color: #a0a0a0;
   margin: 0 0 0.75rem;
   font-size: 0.9rem;
 }
@@ -111,7 +70,7 @@
   display: flex;
   gap: 1.5rem;
   font-size: 0.9rem;
-  color: #95a5a6;
+  color: #808080;
 }
 
 .preco-unitario {
@@ -132,17 +91,19 @@
 
 .btn-remover {
   padding: 0.5rem 1rem;
-  background-color: #e74c3c;
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 0.9rem;
-  transition: background-color 0.3s;
+  font-weight: 600;
+  transition: all 0.3s;
 }
 
 .btn-remover:hover {
-  background-color: #c0392b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
 }
 
 .resumo-carrinho {
@@ -153,8 +114,8 @@
   display: flex;
   justify-content: space-between;
   padding: 0.75rem 0;
-  border-bottom: 1px solid #ecf0f1;
-  color: #2c3e50;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
 }
 
 .resumo-total {
@@ -163,54 +124,58 @@
   padding: 1.5rem 0;
   font-size: 1.5rem;
   font-weight: bold;
-  color: #2c3e50;
-  border-top: 2px solid #2c3e50;
+  color: #e0e0e0;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
   margin-top: 1rem;
 }
 
 .btn-finalizar {
   width: 100%;
   padding: 1rem;
-  background-color: #27ae60;
+  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 1.1rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s;
   margin-top: 1.5rem;
 }
 
 .btn-finalizar:hover {
-  background-color: #229954;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
 }
 
 .carrinho-vazio {
-  background: white;
+  background: rgba(30, 30, 46, 0.95);
   padding: 4rem 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
   grid-column: 1 / -1;
 }
 
 .carrinho-vazio h2 {
-  color: #2c3e50;
+  color: #e0e0e0;
   margin-bottom: 1rem;
 }
 
 .carrinho-vazio p {
-  color: #7f8c8d;
+  color: #a0a0a0;
   font-size: 1.1rem;
 }
 
 .erro {
-  background-color: #f8d7da;
-  color: #721c24;
+  background: rgba(255, 107, 107, 0.1);
+  color: #ff6b6b;
   padding: 1rem;
-  border-radius: 4px;
+  border-radius: 8px;
   margin-bottom: 1rem;
   text-align: center;
+  border: 1px solid rgba(255, 107, 107, 0.3);
 }
 
 @media (max-width: 1024px) {

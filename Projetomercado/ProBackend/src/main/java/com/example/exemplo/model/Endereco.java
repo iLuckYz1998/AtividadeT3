@@ -25,15 +25,21 @@ private Long id;
 private String rua;
 
 @Column(nullable = false)
-private String Cidade;
+private String cidade;
 
 @Column(nullable = false)
-private String Estado;
+private String estado;
 
 @Column(nullable = false)
 private String numero;
 
 @Column(nullable = false)
 private String cep;
+
+@Column(nullable = true)
+private String bairro;
+
+@Column(nullable = true)
+private String complemento;
 
 }

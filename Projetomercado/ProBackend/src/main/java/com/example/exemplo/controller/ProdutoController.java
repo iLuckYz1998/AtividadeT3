@@ -11,26 +11,47 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
 import com.example.exemplo.dto.ProdutoRequestDTO;
 import com.example.exemplo.dto.ProdutoResponseDTO;
+import com.example.exemplo.model.Usuario;
+import com.example.exemplo.repository.UsuarioRepository;
 import com.example.exemplo.service.ProdutoService;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/produto")
+@RequestMapping("/produtos") 
 public class ProdutoController {
     
     @Autowired
     private ProdutoService produtoService;
 
-        
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    private void validarAdmin(Long usuarioId){
+        if(usuarioId == null){
+            throw new RuntimeException("Usuário não autenticado");
+        }
+
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        if(!"ADMIN".equals(usuario.getTipo())){
+            throw new RuntimeException("Apenas administradores podem realizar esta operação");
+        }
+    }
+
     @PostMapping
-    public ResponseEntity<Map<String, Object>> salvar(@Valid @RequestBody ProdutoRequestDTO dto){
+    public ResponseEntity<Map<String, Object>> salvar(
+        @RequestHeader(value = "Usuario-Id", required = false) Long usuarioId,
+        @Valid @RequestBody ProdutoRequestDTO dto){
+        validarAdmin(usuarioId);
         produtoService.salvarProduto(dto);
         return ResponseEntity
         .created(null)
@@ -51,8 +72,10 @@ public class ProdutoController {
     
     @PutMapping("/{id}")
     public ResponseEntity<Map<String, Object>> atualizar(
+        @RequestHeader(value = "Usuario-Id", required = false) Long usuarioId,
         @PathVariable Long id,
         @Valid @RequestBody  ProdutoRequestDTO dto){
+            validarAdmin(usuarioId);
             produtoService.atualizarProduto(id, dto);
 
             return ResponseEntity
@@ -63,10 +86,14 @@ public class ProdutoController {
 
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> deletarUsuario (@PathVariable Long id){
+    public ResponseEntity<Map<String, Object>> deletarUsuario (
+        @RequestHeader(value = "Usuario-Id", required = false) Long usuarioId,
+        @PathVariable Long id){
+        validarAdmin(usuarioId);
         produtoService.deletarProduto(id);
+
         return ResponseEntity
         .ok()
-        .body(Map.of("menssage","Excluido com sucesso", "Sucesso", true));
+        .body(Map.of("menssage", "Produto deletado com sucesso", "Sucesso", "true"));
     }
 }

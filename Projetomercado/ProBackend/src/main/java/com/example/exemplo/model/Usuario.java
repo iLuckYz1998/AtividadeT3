@@ -1,4 +1,3 @@
-
 package com.example.exemplo.model;
 
 import jakarta.persistence.CascadeType;
@@ -7,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,20 +25,27 @@ public class Usuario {
     @Column(nullable=false)
     private String nome;
 
-     @Column(nullable=false, unique=true)
+    @Column(nullable=false, unique=true)
     private String email;
 
     @Column(nullable=false, unique=true)
     private String cpf;
 
-     @Column(nullable=false)
+    @Column(nullable=false)
     private String senha;
 
+    @Column(nullable=true)
+    private String telefone;
+
+    @Column(nullable=false)
+    private String tipo = "CLIENTE"; // ADMIN ou CLIENTE
+
     @OneToOne(cascade=CascadeType.ALL)
-     @Column(nullable=false)
+    @JoinColumn(name = "endereco_id", nullable=false)
     private Endereco endereco;
 
+    
     @OneToOne(cascade = CascadeType.ALL)
-    @Column(nullable=true)
+    @JoinColumn(name = "carrinho_id", nullable=true)
     private Carrinho carrinho;
 }

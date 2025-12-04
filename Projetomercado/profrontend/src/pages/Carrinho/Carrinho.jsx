@@ -1,28 +1,33 @@
-import { useState } from 'react';
-import { carrinhoService } from '../../services/api';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { carrinhoService, vendasService } from '../../services/api';
 import './Carrinho.css';
 
 function Carrinho() {
-  const [cpf, setCpf] = useState('');
+  const navigate = useNavigate();
   const [carrinho, setCarrinho] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState('');
+  const [sucesso, setSucesso] = useState('');
+  const [finalizando, setFinalizando] = useState(false);
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
 
-  const buscarCarrinho = async (e) => {
-    if (e) e.preventDefault();
-
-    if (!cpf.trim()) {
-      setErro('Digite um CPF válido');
+  useEffect(() => {
+    if (!usuario) {
+      navigate('/login');
       return;
     }
+    buscarCarrinho();
+  }, []);
 
+  const buscarCarrinho = async () => {
     try {
       setLoading(true);
       setErro('');
-      const data = await carrinhoService.listar(cpf);
+      const data = await carrinhoService.listar(usuario.cpf);
       setCarrinho(data);
     } catch (error) {
-      setErro('Erro ao buscar carrinho. Verifique se o CPF está correto.');
+      setErro('Erro ao buscar carrinho.');
       setCarrinho(null);
       console.error('Erro:', error);
     } finally {
@@ -32,7 +37,7 @@ function Carrinho() {
 
   const removerItem = async (produtoId) => {
     try {
-      const data = await carrinhoService.removerItem(cpf, produtoId);
+      const data = await carrinhoService.removerItem(usuario.cpf, produtoId);
       setCarrinho(data);
       setErro('');
     } catch (error) {
@@ -44,35 +49,63 @@ function Carrinho() {
   const calcularTotal = () => {
     if (!carrinho || !carrinho.itens) return 0;
     return carrinho.itens.reduce(
-      (total, item) => total + item.produto.preco * item.quantidade,
+      (total, item) => total + item.precoUnitario * item.quantidade,
       0
     );
   };
+
+  const finalizarCompra = async () => {
+    if (!carrinho || !carrinho.itens || carrinho.itens.length === 0) {
+      setErro('Seu carrinho está vazio!');
+      return;
+    }
+
+    if (!window.confirm('Deseja finalizar a compra?')) {
+      return;
+    }
+
+    try {
+      setFinalizando(true);
+      setErro('');
+      setSucesso('');
+
+      const venda = {
+        usuarioCpf: usuario.cpf,
+        valorTotal: calcularTotal()
+      };
+
+      await vendasService.criar(venda);
+
+      setSucesso('Compra finalizada com sucesso!');
+
+      // Limpar carrinho após 2 segundos e recarregar
+      setTimeout(async () => {
+        await buscarCarrinho();
+        setSucesso('');
+      }, 2000);
+
+    } catch (error) {
+      setErro('Erro ao finalizar compra. Tente novamente.');
+      console.error('Erro:', error);
+    } finally {
+      setFinalizando(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="carrinho-page">
+        <h1>Meu Carrinho</h1>
+        <div className="loading">Carregando carrinho...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="carrinho-page">
       <h1>Meu Carrinho</h1>
 
-      <div className="busca-carrinho">
-        <form onSubmit={buscarCarrinho}>
-          <div className="form-group">
-            <label htmlFor="cpf">Digite seu CPF para ver seu carrinho:</label>
-            <div className="input-group">
-              <input
-                type="text"
-                id="cpf"
-                value={cpf}
-                onChange={(e) => setCpf(e.target.value)}
-                placeholder="000.000.000-00"
-              />
-              <button type="submit" className="btn-buscar" disabled={loading}>
-                {loading ? 'Buscando...' : 'Buscar'}
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-
+      {sucesso && <div className="sucesso">{sucesso}</div>}
       {erro && <div className="erro">{erro}</div>}
 
       {carrinho && (
@@ -90,17 +123,17 @@ function Carrinho() {
                   <div key={index} className="item-carrinho">
                     <div className="item-info">
                       <h3>{item.produto.nome}</h3>
-                      <p className="item-desc">{item.produto.descricao}</p>
+                      <p className="item-desc">Modelo: {item.produto.modelo} | Cor: {item.produto.cor} | Tamanho: {item.produto.tamanho}</p>
                       <div className="item-detalhes">
                         <span>Quantidade: {item.quantidade}</span>
                         <span className="preco-unitario">
-                          R$ {item.produto.preco.toFixed(2)} / un
+                          R$ {item.precoUnitario.toFixed(2)} / un
                         </span>
                       </div>
                     </div>
                     <div className="item-acoes">
                       <div className="subtotal">
-                        R$ {(item.produto.preco * item.quantidade).toFixed(2)}
+                        R$ {(item.precoUnitario * item.quantidade).toFixed(2)}
                       </div>
                       <button
                         className="btn-remover"
@@ -127,8 +160,12 @@ function Carrinho() {
                   <span>Total:</span>
                   <span>R$ {calcularTotal().toFixed(2)}</span>
                 </div>
-                <button className="btn-finalizar">
-                  Finalizar Compra
+                <button
+                  className="btn-finalizar"
+                  onClick={finalizarCompra}
+                  disabled={finalizando}
+                >
+                  {finalizando ? 'Finalizando...' : 'Finalizar Compra'}
                 </button>
               </div>
             </>

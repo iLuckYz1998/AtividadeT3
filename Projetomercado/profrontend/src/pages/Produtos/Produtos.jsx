@@ -11,10 +11,13 @@ function Produtos() {
   const [produtoEditando, setProdutoEditando] = useState(null);
 
   const [formData, setFormData] = useState({
+    codigo: '',
     nome: '',
-    descricao: '',
-    preco: '',
-    estoque: ''
+    modelo: '',
+    cor: '',
+    tamanho: '',
+    quantidade: '',
+    preco: ''
   });
 
   useEffect(() => {
@@ -45,10 +48,13 @@ function Produtos() {
 
     try {
       const produto = {
+        codigo: formData.codigo,
         nome: formData.nome,
-        descricao: formData.descricao,
-        preco: parseFloat(formData.preco),
-        estoque: parseInt(formData.estoque)
+        modelo: formData.modelo,
+        cor: formData.cor,
+        tamanho: formData.tamanho,
+        quantidade: parseInt(formData.quantidade),
+        preco: parseFloat(formData.preco)
       };
 
       if (modoEdicao && produtoEditando) {
@@ -71,10 +77,13 @@ function Produtos() {
 
   const handleEditar = (produto) => {
     setFormData({
+      codigo: produto.codigo,
       nome: produto.nome,
-      descricao: produto.descricao,
-      preco: produto.preco.toString(),
-      estoque: produto.estoque.toString()
+      modelo: produto.modelo,
+      cor: produto.cor,
+      tamanho: produto.tamanho,
+      quantidade: produto.quantidade.toString(),
+      preco: produto.preco.toString()
     });
     setProdutoEditando(produto);
     setModoEdicao(true);
@@ -99,10 +108,13 @@ function Produtos() {
 
   const limparFormulario = () => {
     setFormData({
+      codigo: '',
       nome: '',
-      descricao: '',
-      preco: '',
-      estoque: ''
+      modelo: '',
+      cor: '',
+      tamanho: '',
+      quantidade: '',
+      preco: ''
     });
     setModoEdicao(false);
     setProdutoEditando(null);
@@ -121,6 +133,18 @@ function Produtos() {
 
           <form onSubmit={handleSubmit} className="form-produto">
             <div className="form-group">
+              <label htmlFor="codigo">Código *</label>
+              <input
+                type="text"
+                id="codigo"
+                name="codigo"
+                value={formData.codigo}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
               <label htmlFor="nome">Nome *</label>
               <input
                 type="text"
@@ -133,18 +157,57 @@ function Produtos() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="descricao">Descrição *</label>
-              <textarea
-                id="descricao"
-                name="descricao"
-                value={formData.descricao}
+              <label htmlFor="modelo">Modelo *</label>
+              <input
+                type="text"
+                id="modelo"
+                name="modelo"
+                value={formData.modelo}
                 onChange={handleChange}
-                rows="3"
                 required
               />
             </div>
 
             <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="cor">Cor *</label>
+                <input
+                  type="text"
+                  id="cor"
+                  name="cor"
+                  value={formData.cor}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="tamanho">Tamanho *</label>
+                <input
+                  type="text"
+                  id="tamanho"
+                  name="tamanho"
+                  value={formData.tamanho}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="quantidade">Quantidade *</label>
+                <input
+                  type="number"
+                  id="quantidade"
+                  name="quantidade"
+                  value={formData.quantidade}
+                  onChange={handleChange}
+                  min="0"
+                  required
+                />
+              </div>
+
               <div className="form-group">
                 <label htmlFor="preco">Preço (R$) *</label>
                 <input
@@ -154,19 +217,6 @@ function Produtos() {
                   value={formData.preco}
                   onChange={handleChange}
                   step="0.01"
-                  min="0"
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="estoque">Estoque *</label>
-                <input
-                  type="number"
-                  id="estoque"
-                  name="estoque"
-                  value={formData.estoque}
-                  onChange={handleChange}
                   min="0"
                   required
                 />
@@ -203,13 +253,18 @@ function Produtos() {
                 <div key={produto.id} className="produto-item">
                   <div className="produto-info">
                     <h3>{produto.nome}</h3>
-                    <p className="desc">{produto.descricao}</p>
+                    <p className="codigo">Código: {produto.codigo}</p>
                     <div className="produto-detalhes">
+                      <span className="modelo">Modelo: {produto.modelo}</span>
+                      <span className="cor">Cor: {produto.cor}</span>
+                      <span className="tamanho">Tamanho: {produto.tamanho}</span>
+                    </div>
+                    <div className="produto-valores">
                       <span className="preco">
                         R$ {produto.preco ? produto.preco.toFixed(2) : '0.00'}
                       </span>
-                      <span className="estoque">
-                        Estoque: {produto.estoque}
+                      <span className="quantidade">
+                        Estoque: {produto.quantidade}
                       </span>
                     </div>
                   </div>

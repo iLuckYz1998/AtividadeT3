@@ -25,7 +25,7 @@ public class CarrinhoService {
 
     
     public Carrinho listarCarrinho(String cpf) {
-        return carrinhoRepository.findByUsuarioId(cpf)
+        return carrinhoRepository.findByUsuarioCpf(cpf)
                 .orElseThrow(() -> new RuntimeException("Carrinho não encontrado para este usuário."));
     }
 
@@ -38,7 +38,7 @@ public class CarrinhoService {
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
 
         
-        Carrinho carrinho = carrinhoRepository.findByUsuarioId(cpf)
+        Carrinho carrinho = carrinhoRepository.findByUsuarioCpf(cpf)
                 .orElseGet(() -> {
                     Carrinho novo = new Carrinho();
                     novo.setUsuario(usuario);
@@ -85,7 +85,7 @@ public class CarrinhoService {
     public Carrinho removerItem(String cpf, String produtoId) {
 
         
-        Carrinho carrinho = carrinhoRepository.findByUsuarioId(cpf)
+        Carrinho carrinho = carrinhoRepository.findByUsuarioCpf(cpf)
                 .orElseThrow(() -> new RuntimeException("Carrinho não encontrado."));
 
         
@@ -110,6 +110,12 @@ public class CarrinhoService {
                 .mapToDouble(i -> i.getPrecoUnitario() * i.getQuantidade())
                 .sum();
 
+        int totalItens = carrinho.getItens()
+                .stream()
+                .mapToInt(ItemCarrinho::getQuantidade)
+                .sum();
+
         carrinho.setValorTotal(total);
+        carrinho.setTotalItens(totalItens);
     }
 }

@@ -4,8 +4,10 @@
 
 .contato-page h1 {
   text-align: center;
-  color: #2c3e50;
+  color: #e0e0e0;
   margin-bottom: 2rem;
+  font-size: 2.5rem;
+  font-weight: 700;
 }
 
 .contato-container {
@@ -21,36 +23,40 @@
 }
 
 .info-card {
-  background: white;
+  background: rgba(30, 30, 46, 0.95);
   padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .info-card h2 {
-  color: #2c3e50;
+  color: #e0e0e0;
   font-size: 1.1rem;
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  font-weight: 600;
 }
 
 .info-card p {
   margin: 0.5rem 0;
-  color: #7f8c8d;
+  color: #a0a0a0;
 }
 
 .form-section {
-  background: white;
+  background: rgba(30, 30, 46, 0.95);
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .form-section h2 {
-  color: #2c3e50;
+  color: #e0e0e0;
   margin-bottom: 1.5rem;
+  font-weight: 600;
 }
 
 .form-contato .form-group {
@@ -60,7 +66,7 @@
 .form-contato label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #2c3e50;
+  color: #a0a0a0;
   font-weight: 500;
 }
 
@@ -68,16 +74,19 @@
 .form-contato textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #bdc3c7;
-  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
   font-size: 1rem;
   font-family: inherit;
+  background: rgba(0, 0, 0, 0.3);
+  color: #e0e0e0;
 }
 
 .form-contato input:focus,
 .form-contato textarea:focus {
   outline: none;
   border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
 
 .form-contato textarea {
@@ -87,26 +96,29 @@
 .btn-enviar {
   width: 100%;
   padding: 1rem;
-  background-color: #3498db;
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 1.1rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s;
 }
 
 .btn-enviar:hover {
-  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
 }
 
 .sucesso {
-  background-color: #d4edda;
-  color: #155724;
+  background: rgba(39, 174, 96, 0.1);
+  color: #27ae60;
   padding: 1rem;
-  border-radius: 4px;
+  border-radius: 8px;
   margin-bottom: 1.5rem;
   text-align: center;
+  border: 1px solid rgba(39, 174, 96, 0.3);
 }
 
 @media (max-width: 1024px) {
