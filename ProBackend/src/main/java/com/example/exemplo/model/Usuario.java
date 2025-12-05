@@ -1,5 +1,7 @@
 package com.example.exemplo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -47,5 +49,6 @@ public class Usuario {
     
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "carrinho_id", nullable=true)
+    @JsonIgnore
     private Carrinho carrinho;
 }

@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.example.exemplo.dto.UsuarioRequestDTO;
 import com.example.exemplo.dto.UsuarioResponseDTO;
+import com.example.exemplo.model.Carrinho;
 import com.example.exemplo.model.Usuario;
+import com.example.exemplo.repository.CarrinhoRepository;
 import com.example.exemplo.repository.UsuarioRepository;
 
 
@@ -19,6 +21,8 @@ public class UsuarioService {
     
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private CarrinhoRepository carrinhoRepository;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -46,6 +50,11 @@ public class UsuarioService {
         novoUsuario.setTelefone(usuarioRequestDTO.getTelefone());
         novoUsuario.setSenha(bCryptPasswordEncoder.encode(usuarioRequestDTO.getSenha()));
         novoUsuario.setTipo(usuarioRequestDTO.getTipo() != null ? usuarioRequestDTO.getTipo() : "CLIENTE");
+
+        // Criar carrinho para o novo usuário
+        Carrinho carrinho = new Carrinho();
+        novoUsuario.setCarrinho(carrinho);
+        carrinho.setUsuario(novoUsuario);
 
         usuarioRepository.save(novoUsuario);
         return novoUsuario;

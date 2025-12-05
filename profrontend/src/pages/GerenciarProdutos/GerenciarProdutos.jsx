@@ -10,10 +10,13 @@ function GerenciarProdutos() {
   const [editando, setEditando] = useState(null);
 
   const [formData, setFormData] = useState({
+    codigo: '',
     nome: '',
-    descricao: '',
-    preco: '',
-    estoque: ''
+    modelo: '',
+    cor: '',
+    tamanho: '',
+    quantidade: '',
+    preco: ''
   });
 
   useEffect(() => {
@@ -46,11 +49,42 @@ function GerenciarProdutos() {
     try {
       const usuario = JSON.parse(localStorage.getItem('usuario'));
 
+      // Validação cliente igual às anotações do backend
+      if (!formData.codigo || formData.codigo.trim().length < 3) {
+        setErro('O código é obrigatório e deve ter pelo menos 3 caracteres.');
+        setLoading(false);
+        return;
+      }
+
+      if (!formData.nome || formData.nome.trim().length < 3) {
+        setErro('O nome é obrigatório e deve ter pelo menos 3 caracteres.');
+        setLoading(false);
+        return;
+      }
+
+      const quantidadeNum = parseInt(formData.quantidade);
+      const precoNum = parseFloat(formData.preco);
+
+      if (isNaN(quantidadeNum) || quantidadeNum < 0) {
+        setErro('A quantidade deve ser um número inteiro maior ou igual a 0.');
+        setLoading(false);
+        return;
+      }
+
+      if (isNaN(precoNum) || precoNum <= 0) {
+        setErro('O preço deve ser um número maior que 0.');
+        setLoading(false);
+        return;
+      }
+
       const produto = {
-        nome: formData.nome,
-        descricao: formData.descricao,
-        preco: parseFloat(formData.preco),
-        estoque: parseInt(formData.estoque)
+        codigo: formData.codigo.trim(),
+        nome: formData.nome.trim(),
+        modelo: formData.modelo.trim(),
+        cor: formData.cor.trim(),
+        tamanho: formData.tamanho.trim(),
+        quantidade: quantidadeNum,
+        preco: precoNum,
       };
 
       if (editando) {
@@ -61,7 +95,7 @@ function GerenciarProdutos() {
         setMensagem('Produto cadastrado com sucesso!');
       }
 
-      setFormData({ nome: '', descricao: '', preco: '', estoque: '' });
+      setFormData({ codigo: '', nome: '', modelo: '', cor: '', tamanho: '', quantidade: '', preco: '' });
       setEditando(null);
       carregarProdutos();
 
@@ -75,17 +109,20 @@ function GerenciarProdutos() {
 
   const handleEditar = (produto) => {
     setFormData({
+      codigo: produto.codigo,
       nome: produto.nome,
-      descricao: produto.descricao,
-      preco: produto.preco.toString(),
-      estoque: produto.estoque.toString()
+      modelo: produto.modelo,
+      cor: produto.cor,
+      tamanho: produto.tamanho,
+      quantidade: produto.quantidade.toString(),
+      preco: produto.preco.toString()
     });
     setEditando(produto.id);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleCancelarEdicao = () => {
-    setFormData({ nome: '', descricao: '', preco: '', estoque: '' });
+    setFormData({ codigo: '', nome: '', modelo: '', cor: '', tamanho: '', quantidade: '', preco: '' });
     setEditando(null);
   };
 
@@ -117,6 +154,19 @@ function GerenciarProdutos() {
         <form onSubmit={handleSubmit} className="form-produto">
           <div className="form-row">
             <div className="form-group">
+              <label htmlFor="codigo">Código do Produto *</label>
+              <input
+                type="text"
+                id="codigo"
+                name="codigo"
+                value={formData.codigo}
+                onChange={handleChange}
+                required
+                minLength={3}
+              />
+            </div>
+
+            <div className="form-group">
               <label htmlFor="nome">Nome do Produto *</label>
               <input
                 type="text"
@@ -124,6 +174,58 @@ function GerenciarProdutos() {
                 name="nome"
                 value={formData.nome}
                 onChange={handleChange}
+                required
+                minLength={3}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="modelo">Modelo *</label>
+              <input
+                type="text"
+                id="modelo"
+                name="modelo"
+                value={formData.modelo}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="cor">Cor *</label>
+              <input
+                type="text"
+                id="cor"
+                name="cor"
+                value={formData.cor}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="tamanho">Tamanho *</label>
+              <input
+                type="text"
+                id="tamanho"
+                name="tamanho"
+                value={formData.tamanho}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="quantidade">Quantidade *</label>
+              <input
+                type="number"
+                id="quantidade"
+                name="quantidade"
+                value={formData.quantidade}
+                onChange={handleChange}
+                min="0"
                 required
               />
             </div>
@@ -141,31 +243,6 @@ function GerenciarProdutos() {
                 required
               />
             </div>
-
-            <div className="form-group">
-              <label htmlFor="estoque">Estoque *</label>
-              <input
-                type="number"
-                id="estoque"
-                name="estoque"
-                value={formData.estoque}
-                onChange={handleChange}
-                min="0"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="descricao">Descrição *</label>
-            <textarea
-              id="descricao"
-              name="descricao"
-              value={formData.descricao}
-              onChange={handleChange}
-              rows="3"
-              required
-            />
           </div>
 
           <div className="form-actions">
@@ -190,10 +267,13 @@ function GerenciarProdutos() {
             <thead>
               <tr>
                 <th>ID</th>
+                <th>Código</th>
                 <th>Nome</th>
-                <th>Descrição</th>
+                <th>Modelo</th>
+                <th>Cor</th>
+                <th>Tamanho</th>
+                <th>Quantidade</th>
                 <th>Preço</th>
-                <th>Estoque</th>
                 <th>Ações</th>
               </tr>
             </thead>
@@ -201,10 +281,13 @@ function GerenciarProdutos() {
               {produtos.map((produto) => (
                 <tr key={produto.id}>
                   <td>{produto.id}</td>
+                  <td>{produto.codigo}</td>
                   <td>{produto.nome}</td>
-                  <td>{produto.descricao}</td>
+                  <td>{produto.modelo}</td>
+                  <td>{produto.cor}</td>
+                  <td>{produto.tamanho}</td>
+                  <td>{produto.quantidade}</td>
                   <td>R$ {produto.preco.toFixed(2)}</td>
-                  <td>{produto.estoque}</td>
                   <td className="acoes">
                     <button
                       className="btn-editar"

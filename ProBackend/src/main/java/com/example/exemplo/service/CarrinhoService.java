@@ -26,7 +26,18 @@ public class CarrinhoService {
     
     public Carrinho listarCarrinho(String cpf) {
         return carrinhoRepository.findByUsuarioCpf(cpf)
-                .orElseThrow(() -> new RuntimeException("Carrinho não encontrado para este usuário."));
+                .orElseGet(() -> {
+                    // Se não encontrar, criar um novo carrinho para o usuário
+                    Usuario usuario = usuarioRepository.findByCpf(cpf)
+                            .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+                    
+                    Carrinho novoCarrinho = new Carrinho();
+                    novoCarrinho.setUsuario(usuario);
+                    usuario.setCarrinho(novoCarrinho);
+                    
+                    usuarioRepository.save(usuario);
+                    return carrinhoRepository.save(novoCarrinho);
+                });
     }
 
 
@@ -46,7 +57,7 @@ public class CarrinhoService {
                 });
 
         
-        Produto produto = produtoRepository.findByCodigo(produtoId)
+        Produto produto = produtoRepository.findById(Long.valueOf(produtoId))
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado."));
 
         
